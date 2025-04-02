@@ -1,10 +1,12 @@
 package com.prathamesh.mynote.controller;
 
 import com.prathamesh.mynote.dto.LoginRequest;
+import com.prathamesh.mynote.dto.LoginResponse;
 import com.prathamesh.mynote.dto.RegisterRequest;
 import com.prathamesh.mynote.model.User;
 import com.prathamesh.mynote.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,16 +27,18 @@ public class AuthController {
 
     // Login a user
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        boolean isAuthenticated = userService.loginUser(request);
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = userService.loginUser(request);
+
+        if (response.getUserId() != null) {
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 
-    @GetMapping("/all")
+
+    @GetMapping("/allUsers")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }

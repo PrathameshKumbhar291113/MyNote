@@ -1,6 +1,7 @@
 package com.prathamesh.mynote.service;
 
 import com.prathamesh.mynote.dto.LoginRequest;
+import com.prathamesh.mynote.dto.LoginResponse;
 import com.prathamesh.mynote.dto.RegisterRequest;
 import com.prathamesh.mynote.model.User;
 import com.prathamesh.mynote.repository.UserRepository;
@@ -27,9 +28,16 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public boolean loginUser(LoginRequest request) {
-        Optional<User> user = userRepository.findByUsername(request.getUsername());
-        return user.isPresent() && user.get().getPassword().equals(request.getPassword());
+    public LoginResponse loginUser(LoginRequest request) {
+        Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (user.getPassword().equals(request.getPassword())) {
+                return new LoginResponse(user.getId(), user.getUsername(), user.getEmail(), "Login successful");
+            }
+        }
+        return new LoginResponse(null, null, null, "Invalid username or password");
     }
 
     public List<User> getAllUsers() {
