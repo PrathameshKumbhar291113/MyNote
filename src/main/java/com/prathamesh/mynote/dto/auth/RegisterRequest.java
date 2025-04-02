@@ -1,14 +1,8 @@
-package com.prathamesh.mynote.dto;
+package com.prathamesh.mynote.dto.auth;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Data
-@NoArgsConstructor
-public class LoginRequest {
+public class RegisterRequest {
     private String username;
+    private String email;
     private String password;
 
     // Getter for username
@@ -21,6 +15,16 @@ public class LoginRequest {
         this.username = username;
     }
 
+    // Getter for email
+    public String getEmail() {
+        return email;
+    }
+
+    // Setter for email
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     // Getter for password
     public String getPassword() {
         return password;
@@ -31,4 +35,3 @@ public class LoginRequest {
         this.password = password;
     }
 }
-

@@ -1,4 +1,4 @@
-package com.prathamesh.mynote.dto;
+package com.prathamesh.mynote.dto.auth;
 
 public class LoginResponse {
     private Long userId;

@@ -1,8 +1,8 @@
 package com.prathamesh.mynote.service;
 
-import com.prathamesh.mynote.dto.LoginRequest;
-import com.prathamesh.mynote.dto.LoginResponse;
-import com.prathamesh.mynote.dto.RegisterRequest;
+import com.prathamesh.mynote.dto.auth.LoginRequest;
+import com.prathamesh.mynote.dto.auth.LoginResponse;
+import com.prathamesh.mynote.dto.auth.RegisterRequest;
 import com.prathamesh.mynote.model.User;
 import com.prathamesh.mynote.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

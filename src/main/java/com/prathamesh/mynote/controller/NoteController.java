@@ -1,5 +1,7 @@
 package com.prathamesh.mynote.controller;
 
+import com.prathamesh.mynote.dto.notes.CreateNoteRequestBody;
+import com.prathamesh.mynote.dto.notes.UpdateNoteRequestBody;
 import com.prathamesh.mynote.model.Note;
 import com.prathamesh.mynote.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,8 @@ public class NoteController {
 
     // Create Note
     @PostMapping("/create")
-    public ResponseEntity<Note> createNote(@RequestParam Long userId,
-                                           @RequestParam String title,
-                                           @RequestParam String content) {
-        Note note = noteService.createNote(userId, title, content);
+    public ResponseEntity<Note> createNote(@RequestBody CreateNoteRequestBody noteRequestBody) {
+        Note note = noteService.createNote(noteRequestBody.getUserId(), noteRequestBody.getTitle(), noteRequestBody.getContent());
         return ResponseEntity.status(HttpStatus.CREATED).body(note);
     }
 
@@ -40,11 +40,9 @@ public class NoteController {
     }
 
     // Update Note
-    @PutMapping("/update/{noteId}")
-    public ResponseEntity<Note> updateNote(@PathVariable Long noteId,
-                                           @RequestParam String title,
-                                           @RequestParam String content) {
-        Note updatedNote = noteService.updateNote(noteId, title, content);
+    @PutMapping("/update")
+    public ResponseEntity<Note> updateNote(@RequestBody UpdateNoteRequestBody updateNoteRequestBody) {
+        Note updatedNote = noteService.updateNote(updateNoteRequestBody.getNoteId(), updateNoteRequestBody.getTitle(), updateNoteRequestBody.getContent());
         return ResponseEntity.ok(updatedNote);
     }
 
@@ -53,6 +51,15 @@ public class NoteController {
     public ResponseEntity<String> deleteNote(@PathVariable Long noteId) {
         noteService.deleteNote(noteId);
         return ResponseEntity.ok("Note deleted successfully");
+    }
+
+    @DeleteMapping("/deleteAllNotesOfUser")
+    public ResponseEntity<String> deleteAllNotesOfUser(@RequestParam Long userId) {
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("User ID cannot be null");
+        }
+        noteService.deleteAllNotesOfUserByUserId(userId);
+        return ResponseEntity.ok("Notes deleted successfully");
     }
 }
 

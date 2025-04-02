@@ -4,10 +4,14 @@ import com.prathamesh.mynote.model.Note;
 import com.prathamesh.mynote.model.User;
 import com.prathamesh.mynote.repository.NoteRepository;
 import com.prathamesh.mynote.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class NoteService {
 
@@ -21,7 +25,6 @@ public class NoteService {
     public Note createNote(Long userId, String title, String content) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         Note note = new Note(title, content, user);
         return noteRepository.save(note);
     }
@@ -55,4 +58,14 @@ public class NoteService {
 
         noteRepository.delete(note);
     }
+
+    @Transactional
+    public void deleteAllNotesOfUserByUserId(Long userId) {
+        if (!noteRepository.existsByUserId(userId)) {
+            throw new EntityNotFoundException("No notes found for user with ID: " + userId);
+        }
+        noteRepository.deleteByUserId(userId);
+    }
+
+
 }
